@@ -3,22 +3,22 @@ package com.example.smombie
 import com.opencsv.bean.CsvBindByName
 
 data class Question(
-    @CsvBindByName(column = "問題番号", required = true)
+        @CsvBindByName(column = "NUM", required = true)
     val num: String = "",
 
-    @CsvBindByName(column = "問題文", required = true)
+        @CsvBindByName(column = "QUESTION", required = true)
     val question: String = "",
 
-    @CsvBindByName(column = "正解", required = true)
-    val collectAns: String = "",
+        @CsvBindByName(column = "CORRECT_ANSWER", required = true)
+    val correctAns: String = "",
 
-    @CsvBindByName(column = "回答1", required = true)
-    val otherAns1: String = "",
+        @CsvBindByName(column = "INCORRECT_ANSWER1", required = true)
+    val incorrectAns1: String = "",
 
-    @CsvBindByName(column = "回答2", required = true)
-    val otherAns2: String = "",
+        @CsvBindByName(column = "INCORRECT_ANSWER2", required = true)
+    val incorrectAns2: String = "",
 
-    @CsvBindByName(column = "回答3", required = true)
-    val otherAns3: String = ""
+        @CsvBindByName(column = "INCORRECT_ANSWER3", required = true)
+    val incorrectAns3: String = ""
 
 )

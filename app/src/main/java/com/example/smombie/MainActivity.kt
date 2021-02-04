@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG,Metadata.getLabel())
         startBtn.setOnClickListener{
             val measurementIntent = Intent(applicationContext, MeasurementActivity::class.java)
+
             startActivity(measurementIntent)
         }
 
