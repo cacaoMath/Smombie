@@ -1,23 +1,44 @@
 package com.example.smombie
 
+import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
 import android.widget.Button
+import android.widget.Spinner
+import androidx.annotation.RequiresApi
 
 class MainActivity : AppCompatActivity() {
     private val TAG = this::class.java.simpleName
-    private lateinit var startBtn: Button
+    lateinit var startBtn: Button
+    lateinit var labelSpinner: Spinner
+    lateinit var questionSpinner: Spinner
+    lateinit var labelList: Array<String>
+    lateinit var patternList: Array<String>
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         startBtn = findViewById(R.id.start_btn)
+        labelSpinner = findViewById(R.id.labelSpn)
+        questionSpinner = findViewById(R.id.qstSpn)
 
-        Metadata.setLabel("oh my got!!")
+
+        //spinnerの動作用設定
+        labelSpinner.isFocusable = false
+        questionSpinner.isFocusable = false
+        labelList = resources.getStringArray(R.array.labelList)
+        patternList = resources.getStringArray(R.array.patternList)
+        labelSpinner.onItemSelectedListener = SpinnerActivity(labelList)
+        questionSpinner.onItemSelectedListener = SpinnerActivity(patternList)
+
         
         Log.d(TAG,Metadata.getLabel())
         startBtn.setOnClickListener{
@@ -44,6 +65,38 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    //スピナーの動きを決めるやつ
+    class SpinnerActivity(list: Array<String>) : Activity(), AdapterView.OnItemSelectedListener {
+
+        private val TAG = this::class.java.simpleName
+        private var arrayList : Array<String>? = null
+
+        init {
+            this.arrayList = list
+        }
+        override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
+
+            if(!parent.isFocusable) {
+                parent.isFocusable = true
+                return
+            }
+            when(parent.id){
+                R.id.labelSpn ->{
+                    Log.d(TAG,"${arrayList?.get(id.toInt())}")
+                    arrayList?.get(id.toInt())?.let { Metadata.setLabel(it) }
+                }
+                R.id.qstSpn -> {
+                    Log.d(TAG, "${arrayList?.get(id.toInt())}")
+                    arrayList?.get(id.toInt())?.let { Metadata.setPattern(it) }
+                }
+            }
+        }
+
+        override fun onNothingSelected(parent: AdapterView<*>) {
+            // Another interface callback
+        }
     }
 
 }
