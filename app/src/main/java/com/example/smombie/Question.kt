@@ -4,7 +4,7 @@ import com.opencsv.bean.CsvBindByName
 
 data class Question(
         @CsvBindByName(column = "NUM", required = true)
-    val num: String = "",
+    val number: String = "",
 
         @CsvBindByName(column = "QUESTION", required = true)
     val question: String = "",

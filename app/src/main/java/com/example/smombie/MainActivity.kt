@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +26,24 @@ class MainActivity : AppCompatActivity() {
             startActivity(measurementIntent)
         }
 
+    }
+
+    //オプションメニュー表示用
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_option, menu)
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    //オプションメニュー選択時処理
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.settingMenu -> {
+                val settingIntent = Intent(applicationContext, SettingActivity::class.java)
+                startActivity(settingIntent)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 }
