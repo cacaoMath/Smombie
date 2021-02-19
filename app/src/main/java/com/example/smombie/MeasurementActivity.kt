@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.text.HtmlCompat
 import androidx.core.text.HtmlCompat.FROM_HTML_MODE_COMPACT
 import com.opencsv.bean.CsvToBeanBuilder
@@ -21,6 +20,18 @@ class MeasurementActivity : AppCompatActivity() {
     private lateinit var btn2: Button
     private lateinit var btn3: Button
     private lateinit var btn4: Button
+
+    //回答時間記録用
+    private var ansStartTime : Long = 0
+
+    //結果(正答番号)データ保持用
+    private var rightData  = mutableListOf<String>()
+
+    //回答した問題番号保存用
+    private var answeredData  = mutableListOf<String>()
+
+    //各問題の回答時間
+    private var answerTimeData = mutableListOf<Long>()
 
     //問題文表示用
     private lateinit var qTv: TextView
@@ -47,18 +58,26 @@ class MeasurementActivity : AppCompatActivity() {
         btn3.setOnClickListener(selectBtnListener)
         btn4.setOnClickListener(selectBtnListener)
 
-        //手違いでassets内にcsvがないときの処理
+        Log.d(TAG,Metadata.getLabel())
+
+
         if(questionList.isNotEmpty()){
             shuffledQList = questionList.shuffled().toMutableList()
 
             //初回の問題，ボタン選択肢表示用
+
             setSelectBtnAns(shuffledQList[0])
             setQuestion(shuffledQList[0])
         }else{
+            //手違いでassets内にcsvがないときの処理
             Log.d(TAG,"Question-> $questionList")
         }
 
 
+    }
+
+    private fun getTime(): Long {
+        return System.currentTimeMillis()
     }
 
     //問題の選択肢を4つのボタンにランダムに設定する
@@ -74,6 +93,8 @@ class MeasurementActivity : AppCompatActivity() {
     //問題文表示
     fun setQuestion(question : Question) {
         qTv.text = HtmlCompat.fromHtml("${question.question}", FROM_HTML_MODE_COMPACT)
+        //問題文を出したタイミングを回答時間のスタートとする
+        ansStartTime = getTime()
     }
 
     //csvから問題を読み取り，リストにする
@@ -99,14 +120,24 @@ class MeasurementActivity : AppCompatActivity() {
 
     private inner class SelectButtonListener: View.OnClickListener {
         override fun onClick(view: View){
+            //回答時間を求める
+            val answerTime = getTime() - ansStartTime
+
+
             //ユーザが選択した答え
             val selectText = findViewById<Button>(view.id).text
             //正解の答え
             val correctText = shuffledQList[0].correctAns
 
+            //出題した問題番号
+            answeredData.add("${shuffledQList[0].number}")
+            //各問題の回答時間を保存
+            answerTimeData.add(answerTime)
             //正誤判定
             if(correctText == selectText){
                 Log.d(TAG,"正解!!")
+                rightData.add("${shuffledQList[0].number}")
+                Log.d(TAG,"$rightData")
             }else{
                 Log.d(TAG, "残念!!${correctText}です．")
             }
@@ -114,9 +145,17 @@ class MeasurementActivity : AppCompatActivity() {
             shuffledQList.removeAt(0)
             if(shuffledQList.isEmpty()){
                 Log.d(TAG,"終了！！")
-                val mainIntent = Intent(applicationContext, MainActivity::class.java)
-                mainIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(mainIntent)
+                //計測結果画面へ移動
+                val measurementResultIntent = Intent(applicationContext, MeasurementResultActivity::class.java)
+                measurementResultIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+                //次のアクティビティデータを引き継ぐ
+                // 回答した問題番号（回答内容も？）,正答した問題番号,それぞれの回答時間，ユーザーID，問題パターン
+                measurementResultIntent.putExtra("RightData", rightData.joinToString(prefix = "\"", postfix = "\""))
+                measurementResultIntent.putExtra("AnsweredData", answeredData.joinToString(prefix = "\"", postfix = "\""))
+                measurementResultIntent.putExtra("AnswerTimeData", answerTimeData.joinToString(prefix = "\"", postfix = "\""))
+
+                startActivity(measurementResultIntent)
             }else{
                 setQuestion(shuffledQList[0])
                 setSelectBtnAns(shuffledQList[0])

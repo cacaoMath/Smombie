@@ -11,11 +11,13 @@ class MeasurementResultActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_measurement_result)
 
-        val resultData = intent.getStringArrayExtra("resultData")
-        Log.d(TAG, "$resultData")
+        val rightData = intent.extras?.getString("RightData") ?:""
+        val answeredData = intent.extras?.getString("AnsweredData") ?:""
+        val answerTimeData = intent.extras?.getString("AnswerTimeData") ?:""
+        Log.d(TAG, "$rightData")
 
         //データをcsvに保存
         dataManager = DataFileManager(this.applicationContext)
-        dataManager?.saveData("a,a,a,a,a,a")
+        dataManager?.saveData("${answeredData},${rightData},${answerTimeData},${Metadata.getNote()},${Metadata.getPattern()},${Metadata.getLabel()}")
     }
 }
