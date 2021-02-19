@@ -42,7 +42,13 @@ class DataFileManager(context: Context) {
             if(!dataDir.mkdir()) return
         }
 
-        dataFile = File(dataDir, "measurementData.csv")
+
+        if(!File(dataDir, "measurementData.csv").exists()){
+            dataFile = File(dataDir, "measurementData.csv")
+            dataFile?.appendText("AnsweredNum,RightNum,AnswerTime,Note,Pattern,Label\n", StandardCharsets.UTF_8)
+        }else{
+            dataFile = File(dataDir, "measurementData.csv")
+        }
     }
 
     //ストレージが使用可能かをチェック
