@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
                 val measurementIntent = Intent(applicationContext, MeasurementActivity::class.java)
                 startActivity(measurementIntent)
             }else{
-                Toast.makeText(applicationContext,"メタデータを入力してください", Toast.LENGTH_LONG)
+                Toast.makeText(applicationContext,"メタデータを入力してください", Toast.LENGTH_LONG).show()
             }
 
         }
