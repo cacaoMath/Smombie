@@ -3,16 +3,14 @@ package com.example.smombie
 import android.app.Activity
 import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
-import android.widget.Button
-import android.widget.Spinner
+import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
     private val TAG = this::class.java.simpleName
@@ -21,6 +19,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var questionSpinner: Spinner
     lateinit var labelList: Array<String>
     lateinit var patternList: Array<String>
+    lateinit var noteEt: EditText
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         startBtn = findViewById(R.id.start_btn)
         labelSpinner = findViewById(R.id.labelSpn)
         questionSpinner = findViewById(R.id.qstSpn)
+        noteEt = findViewById(R.id.etMeta)
 
 
         //spinnerの動作用設定
@@ -42,12 +43,19 @@ class MainActivity : AppCompatActivity() {
         
         Log.d(TAG,Metadata.getLabel())
         startBtn.setOnClickListener{
-            val measurementIntent = Intent(applicationContext, MeasurementActivity::class.java)
+            Metadata.setNote(noteEt.text?.toString() ?: "")
+            
+            if(!labelSpinner.isFocusable || !questionSpinner.isFocusable ){
+                val measurementIntent = Intent(applicationContext, MeasurementActivity::class.java)
+                startActivity(measurementIntent)
+            }else{
+                Toast.makeText(applicationContext,"メタデータを入力してください", Toast.LENGTH_LONG)
+            }
 
-            startActivity(measurementIntent)
         }
 
     }
+
 
     //オプションメニュー表示用
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

@@ -3,22 +3,17 @@
 
     <!-- メタデータ入力用 -->
     <string-array name="patternList">
-        <item>Select</item>
+        <item>please select</item>
         <item>A</item>
         <item>B</item>
         <item>C</item>
         <item>D</item>
-        <item>E</item>
         <item>other</item>
     </string-array>
 
     <string-array name="labelList">
-        <item>Select</item>
-        <item>lie</item>
-        <item>sit</item>
-        <item>stand</item>
-        <item>walk_treadmill</item>
-        <item>walk_disturb</item>
+        <item>please select</item>
+        <item>walk</item>
         <item>other</item>
     </string-array>
     <string name="title_activity_settings">SettingsActivity</string>
