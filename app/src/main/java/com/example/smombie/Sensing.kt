@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets
 /**
  * センシング用のクラス
  */
-class Sensing(context: Context) : SensorEventListener {
+class Sensing(context: Context, status : String) : SensorEventListener {
     private val TAG = this::class.java.simpleName
 
     private val sensorManager: SensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -42,11 +42,11 @@ class Sensing(context: Context) : SensorEventListener {
             if(!directory.mkdir()) return
 
         // labelの保存
-        val unixtime = System.currentTimeMillis()
-        val meta = "${unixtime}_$label"
+        val unixTime = System.currentTimeMillis()
+        val meta = "${unixTime}_$label"
         Log.d(TAG, "file mane meta data: $meta")
-        accelerateFile = File(directory, "accelerate_$meta.txt")
-        gyroFile = File(directory, "gyro_$meta.txt")
+        accelerateFile = File(directory, "accelerate_${meta}.txt")
+        gyroFile = File(directory, "gyro_${meta}.txt")
         accelerateFile?.writeText("timestamp,x,y,z\n", StandardCharsets.UTF_8)
         gyroFile?.writeText("timestamp,x,y,z\n", StandardCharsets.UTF_8)
 

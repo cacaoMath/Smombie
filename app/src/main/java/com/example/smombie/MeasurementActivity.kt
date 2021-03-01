@@ -1,5 +1,6 @@
 package com.example.smombie
 
+import Sensing
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,6 +15,9 @@ import java.io.*
 
 class MeasurementActivity : AppCompatActivity() {
     private val TAG = this::class.java.simpleName
+
+    //センシング用
+    lateinit var sensing: Sensing
 
     //選択肢のボタン
     private lateinit var btn1: Button
@@ -42,6 +46,9 @@ class MeasurementActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_measurement)
 
+        //センシング
+        sensing = Sensing(this, Metadata.getLabel() )
+
         //全問題文のリスト
         val questionList = questionReader("Question_p.csv")
 
@@ -64,8 +71,10 @@ class MeasurementActivity : AppCompatActivity() {
         if(questionList.isNotEmpty()){
             shuffledQList = questionList.shuffled().toMutableList()
 
-            //初回の問題，ボタン選択肢表示用
+            //センシングの開始
+            sensing.start(Metadata.getLabel())
 
+            //初回の問題，ボタン選択肢表示用
             setSelectBtnAns(shuffledQList[0])
             setQuestion(shuffledQList[0])
         }else{
@@ -148,6 +157,9 @@ class MeasurementActivity : AppCompatActivity() {
                 //計測結果画面へ移動
                 val measurementResultIntent = Intent(applicationContext, MeasurementResultActivity::class.java)
                 measurementResultIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+                //センシング終了
+                sensing.stop()
 
                 //次のアクティビティデータを引き継ぐ
                 // 回答した問題番号（回答内容も？）,正答した問題番号,それぞれの回答時間，ユーザーID，問題パターン
