@@ -44,8 +44,9 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG,Metadata.getLabel())
         startBtn.setOnClickListener{
             Metadata.setNote(noteEt.text?.toString() ?: "")
-            
-            if(!labelSpinner.isFocusable || !questionSpinner.isFocusable ){
+
+            //メタデータを何かしら選択したか
+            if(Metadata.getLabel() != "" && Metadata.getPattern() != ""){
                 val measurementIntent = Intent(applicationContext, MeasurementActivity::class.java)
                 startActivity(measurementIntent)
             }else{
@@ -86,6 +87,7 @@ class MainActivity : AppCompatActivity() {
         }
         override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
 
+            //アクティビティ起動時に値がとられないようにする．
             if(!parent.isFocusable) {
                 parent.isFocusable = true
                 return

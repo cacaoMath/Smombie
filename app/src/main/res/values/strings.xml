@@ -3,7 +3,7 @@
 
     <!-- メタデータ入力用 -->
     <string-array name="patternList">
-        <item>please select</item>
+        <item>Select</item>
         <item>A</item>
         <item>B</item>
         <item>C</item>
@@ -12,7 +12,7 @@
     </string-array>
 
     <string-array name="labelList">
-        <item>please select</item>
+        <item>Select</item>
         <item>walk</item>
         <item>other</item>
     </string-array>
