@@ -3,14 +3,8 @@ package com.example.smombie
 import android.content.Context
 import android.os.Environment
 import android.util.Log
-import com.opencsv.CSVWriter
-import org.apache.commons.lang3.CharSetUtils.delete
 import java.io.File
-import java.io.StringWriter
 import java.nio.charset.StandardCharsets
-import java.nio.file.Files
-import java.nio.file.Files.delete
-import java.util.*
 
 class DataFileManager(context: Context) {
     private val TAG = this::class.java.simpleName
