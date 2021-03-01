@@ -1,12 +1,8 @@
 package com.example.smombie
 
-import android.animation.ObjectAnimator
-import android.graphics.Path
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.animation.PathInterpolator
+import androidx.appcompat.app.AppCompatActivity
 
 class SettingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
