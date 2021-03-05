@@ -118,6 +118,7 @@ class MeasurementActivity : AppCompatActivity() {
                 .parse()
 
             for (q in beanList) {
+                //todo: 問題パターンによって取り込む問題数を変える処理
                 questionList.add(q)
             }
 
