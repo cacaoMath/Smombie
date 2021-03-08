@@ -93,15 +93,15 @@ class MeasurementActivity : AppCompatActivity() {
     private fun setSelectBtnAns(question : Question){
         val btnList = mutableListOf(btn1,btn2,btn3,btn4).shuffled()
 
-        btnList[0].text = "$question.correctAns"
-        btnList[1].text = "$question.incorrectAns1"
-        btnList[2].text = "$question.incorrectAns2"
-        btnList[3].text = "$question.incorrectAns3"
+        btnList[0].text = "${question.correctAns}"
+        btnList[1].text = "${question.incorrectAns1}"
+        btnList[2].text = "${question.incorrectAns2}"
+        btnList[3].text = "${question.incorrectAns3}"
     }
 
     //問題文表示
     fun setQuestion(question : Question) {
-        qTv.text = HtmlCompat.fromHtml("$question.question", FROM_HTML_MODE_COMPACT)
+        qTv.text = HtmlCompat.fromHtml("${question.question}", FROM_HTML_MODE_COMPACT)
         //問題文を出したタイミングを回答時間のスタートとする
         ansStartTime = getTime()
     }
@@ -140,13 +140,13 @@ class MeasurementActivity : AppCompatActivity() {
             val correctText = shuffledQList[0].correctAns
 
             //出題した問題番号
-            answeredData.add("$shuffledQList[0].number")
+            answeredData.add("${shuffledQList[0].number}")
             //各問題の回答時間を保存
             answerTimeData.add(answerTime)
             //正誤判定
             if(correctText == selectText){
                 Log.d(TAG,"正解!!")
-                rightData.add("$shuffledQList[0].number")
+                rightData.add("${shuffledQList[0].number}")
                 Log.d(TAG,"$rightData")
             }else{
                 Log.d(TAG, "残念!!${correctText}です．")
