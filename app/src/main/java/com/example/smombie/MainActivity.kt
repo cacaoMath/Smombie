@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+        //todo:今後firebase storageから問題をダウンロードして使えるようにする用
         val qdl = QuestionDownloader()
         //qdl.showFileDetail()
 

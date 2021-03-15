@@ -1,9 +1,11 @@
 package com.example.smombie
 
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import androidx.annotation.RequiresApi
 import java.time.LocalDateTime
 
@@ -17,6 +19,9 @@ class MeasurementResultActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_measurement_result)
 
+        val finishBtn: Button = findViewById(R.id.finishBtn)
+        val restartBtn: Button = findViewById(R.id.restartBtn)
+
         val rightData = intent.extras?.getString("RightData") ?:""
         val answeredData = intent.extras?.getString("AnsweredData") ?:""
         val answerTimeData = intent.extras?.getString("AnswerTimeData") ?:""
@@ -25,5 +30,20 @@ class MeasurementResultActivity : AppCompatActivity() {
         //データをcsvに保存
         dataManager = DataFileManager(this.applicationContext)
         dataManager?.saveData("${answeredData},${rightData},${answerTimeData},${Metadata.getNote()},${Metadata.getPattern()},${Metadata.getLabel()},${LocalDateTime.now()}")
+
+        restartBtn.setOnClickListener {
+            val measurementIntent = Intent(applicationContext, MeasurementActivity::class.java)
+            startActivity(measurementIntent)
+            finish()
+        }
+
+        finishBtn.setOnClickListener {
+            val mainIntent = Intent(applicationContext, MainActivity::class.java)
+            //メタデータをリセットする
+            Metadata.resetValues()
+            startActivity(mainIntent)
+            finish()
+        }
+
     }
 }
