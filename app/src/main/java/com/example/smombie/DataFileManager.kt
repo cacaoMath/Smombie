@@ -17,7 +17,7 @@ class DataFileManager(context: Context) {
 
     fun saveData(dataStr : String){
         checkFile()
-        dataFile?.appendText("$dataStr,\n", StandardCharsets.UTF_8)
+        dataFile?.appendText("$dataStr\n", StandardCharsets.UTF_8)
     }
 
     fun deleteFile(){
@@ -39,7 +39,7 @@ class DataFileManager(context: Context) {
 
         if(!File(dataDir, "measurementData.csv").exists()){
             dataFile = File(dataDir, "measurementData.csv")
-            dataFile?.appendText("AnsweredNum,RightNum,AnswerTime,Note,Pattern,Label\n", StandardCharsets.UTF_8)
+            dataFile?.appendText("AnsweredNum,RightNum,AnswerTime,Note,Pattern,Label,Date\n", StandardCharsets.UTF_8)
         }else{
             dataFile = File(dataDir, "measurementData.csv")
         }
