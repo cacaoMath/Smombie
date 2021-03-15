@@ -49,8 +49,11 @@ class MeasurementActivity : AppCompatActivity() {
         //センシング
         sensing = Sensing(this, Metadata.getLabel() )
 
-        //全問題文のリスト
-        val questionList = questionReader("Question_p.csv")
+        //全問題文のリスト,csvから取り込む
+        val allQuestionList = questionReader("JLPT_questions.csv")
+
+        //選択パターン分の問題リスト
+        val questionList = setQuestionPattern(allQuestionList, Metadata.getPattern())
 
         btn1 = findViewById<Button>(R.id.button1)
         btn2 = findViewById<Button>(R.id.button2)
@@ -118,12 +121,44 @@ class MeasurementActivity : AppCompatActivity() {
                 .parse()
 
             for (q in beanList) {
-                //todo: 問題パターンによって取り込む問題数を変える処理
                 questionList.add(q)
             }
 
         }catch(e :Exception){
             Log.d(TAG,"ファイルが存在しません")
+        }
+        return questionList
+    }
+
+    //メタデータに入力された問題パターンに従って，出題する問題を出力
+    private fun setQuestionPattern(allQuestionList: MutableList<Question>, pattern : String):MutableList<Question>{
+        val questionList: MutableList<Question>
+        when(pattern){
+            "A"->{
+                questionList = allQuestionList.filter {
+                    (it.number.toInt() in 1..50)
+                }.toMutableList()
+            }
+            "B"->{
+                questionList = allQuestionList.filter {
+                    (it.number.toInt() in 51..100)
+                }.toMutableList()
+            }
+            "C"->{
+                questionList = allQuestionList.filter {
+                    (it.number.toInt() in 101..150)
+                }.toMutableList()
+            }
+            "D"->{
+                questionList = allQuestionList.filter {
+                    (it.number.toInt() in 151..200)
+                }.toMutableList()
+            }
+            else->{
+                questionList = allQuestionList.filter {
+                    (it.number.toInt() in 201..allQuestionList.size)
+                }.toMutableList()
+            }
         }
         return questionList
     }
