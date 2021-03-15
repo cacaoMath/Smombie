@@ -10,7 +10,7 @@
         android:id="@+id/restartBtn"
         android:layout_width="300dp"
         android:layout_height="80dp"
-        android:text="Restsrt"
+        android:text="Restart"
         app:layout_constraintBottom_toTopOf="@+id/finishBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
