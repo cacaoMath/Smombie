@@ -2,20 +2,17 @@ package com.example.smombie
 
 import Sensing
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
 import androidx.core.text.HtmlCompat.FROM_HTML_MODE_COMPACT
-import com.opencsv.bean.CsvToBeanBuilder
-import java.io.*
 
 class MeasurementActivity : AppCompatActivity() {
     private val TAG = this::class.java.simpleName
-
     //センシング用
     lateinit var sensing: Sensing
 
@@ -50,8 +47,8 @@ class MeasurementActivity : AppCompatActivity() {
         sensing = Sensing(this, Metadata.getLabel() )
 
         //全問題文のリスト,csvから取り込む
-        val allQuestionList = questionReader("JLPT_questions.csv")
-
+        val allQuestionList = Metadata.getAllQuestionList()
+        Log.d(TAG,"${allQuestionList.size}")
         //選択パターン分の問題リスト
         val questionList = setQuestionPattern(allQuestionList, Metadata.getPattern())
 
@@ -109,26 +106,6 @@ class MeasurementActivity : AppCompatActivity() {
         ansStartTime = getTime()
     }
 
-    //csvから問題を読み取り，リストにする
-    private fun questionReader(fileName : String):MutableList<Question>{
-        val questionList = mutableListOf<Question>()
-        try{
-            val csvStream = BufferedReader(InputStreamReader(assets.open(fileName)))
-            Log.d(TAG,"${assets.open(fileName)}")
-            val beanList = CsvToBeanBuilder<Question>(csvStream)
-                .withType(Question::class.java)
-                .build()
-                .parse()
-
-            for (q in beanList) {
-                questionList.add(q)
-            }
-
-        }catch(e :Exception){
-            Log.d(TAG,"ファイルが存在しません")
-        }
-        return questionList
-    }
 
     //メタデータに入力された問題パターンに従って，出題する問題を出力
     private fun setQuestionPattern(allQuestionList: MutableList<Question>, pattern : String):MutableList<Question>{
@@ -164,7 +141,17 @@ class MeasurementActivity : AppCompatActivity() {
     }
 
     private inner class SelectButtonListener: View.OnClickListener {
+        //ボタン2重連打防止用
+        private var isBtnEventEnable = true
         override fun onClick(view: View){
+            if(!isBtnEventEnable)return
+            else{
+                isBtnEventEnable = false
+                view.postDelayed({
+                    isBtnEventEnable = true
+                }, 400L)
+            }
+
             //回答時間を求める
             val answerTime = getTime() - ansStartTime
 

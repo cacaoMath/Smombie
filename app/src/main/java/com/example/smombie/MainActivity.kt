@@ -11,6 +11,9 @@ import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.opencsv.bean.CsvToBeanBuilder
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
 class MainActivity : AppCompatActivity() {
     private val TAG = this::class.java.simpleName
@@ -40,6 +43,9 @@ class MainActivity : AppCompatActivity() {
         labelSpinner.onItemSelectedListener = SpinnerActivity(labelList)
         questionSpinner.onItemSelectedListener = SpinnerActivity(patternList)
 
+        //csvから問題を取り込んでおく
+        Metadata.setAllQuestionList(questionReader("JLPT_questions.csv"))
+
         
         Log.d(TAG,Metadata.getLabel())
         startBtn.setOnClickListener{
@@ -61,6 +67,26 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //csvから問題を読み取り，リストにする
+    private fun questionReader(fileName : String):MutableList<Question>{
+        val questionList = mutableListOf<Question>()
+        try{
+            val csvStream = BufferedReader(InputStreamReader(assets.open(fileName)))
+            Log.d(TAG,"${assets.open(fileName)}")
+            val beanList = CsvToBeanBuilder<Question>(csvStream)
+                .withType(Question::class.java)
+                .build()
+                .parse()
+
+            for (q in beanList) {
+                questionList.add(q)
+            }
+
+        }catch(e :Exception){
+            Log.d(TAG,"ファイルが存在しません")
+        }
+        return questionList
+    }
 
     //オプションメニュー表示用
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import androidx.annotation.RequiresApi
+import kotlinx.coroutines.runBlocking
 import java.time.LocalDateTime
 
 class MeasurementResultActivity : AppCompatActivity() {
@@ -29,7 +30,11 @@ class MeasurementResultActivity : AppCompatActivity() {
 
         //データをcsvに保存
         dataManager = DataFileManager(this.applicationContext)
-        dataManager?.saveData("${answeredData},${rightData},${answerTimeData},${Metadata.getNote()},${Metadata.getPattern()},${Metadata.getLabel()},${LocalDateTime.now()}")
+        runBlocking {
+            dataManager?.saveData("${answeredData},${rightData},${answerTimeData},${Metadata.getNote()},${Metadata.getPattern()},${Metadata.getLabel()},${LocalDateTime.now()}")
+            Log.d("Block","fileBlock")
+        }
+
 
         restartBtn.setOnClickListener {
             val measurementIntent = Intent(applicationContext, MeasurementActivity::class.java)
@@ -41,6 +46,7 @@ class MeasurementResultActivity : AppCompatActivity() {
             val mainIntent = Intent(applicationContext, MainActivity::class.java)
             //メタデータをリセットする
             Metadata.resetValues()
+            Log.d("Block","finish")
             startActivity(mainIntent)
             finish()
         }

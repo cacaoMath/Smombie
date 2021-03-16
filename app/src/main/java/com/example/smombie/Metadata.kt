@@ -4,6 +4,7 @@ object Metadata {
     private var label  = ""
     private var pattern  = ""
     private var note  = ""
+    private var allQuestionList = mutableListOf<Question>()
 
     fun resetValues(){
         this.label = ""
@@ -35,4 +36,11 @@ object Metadata {
         return this.note
     }
 
+    fun setAllQuestionList(qList : MutableList<Question>){
+        this.allQuestionList = qList
+    }
+
+    fun getAllQuestionList():MutableList<Question>{
+        return this.allQuestionList
+    }
 }
