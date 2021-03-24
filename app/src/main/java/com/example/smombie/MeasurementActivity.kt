@@ -1,15 +1,21 @@
 package com.example.smombie
 
 import Sensing
+import android.content.DialogInterface
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
 import androidx.core.text.HtmlCompat.FROM_HTML_MODE_COMPACT
+import kotlinx.coroutines.runBlocking
+import java.time.LocalDateTime
 
 class MeasurementActivity : AppCompatActivity() {
     private val TAG = this::class.java.simpleName
@@ -85,6 +91,20 @@ class MeasurementActivity : AppCompatActivity() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onBackPressed() {
+        super.onBackPressed()
+        AlertDialog.Builder(this)
+                .setTitle("確認")
+                .setMessage("計測を終了しますか")
+                .setPositiveButton("はい") { dialog, id ->
+                }
+                .setNegativeButton("いいえ") { dialog, id ->
+                    dataSave()
+                }.show()
+        finish()
+    }
+
     private fun getTime(): Long {
         return System.currentTimeMillis()
     }
@@ -138,6 +158,17 @@ class MeasurementActivity : AppCompatActivity() {
             }
         }
         return questionList
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun dataSave(){
+        var dataManager : DataFileManager? = null
+        //データをcsvに保存
+        dataManager = DataFileManager(this.applicationContext)
+        runBlocking {
+            dataManager?.saveData("${answeredData},${rightData},${answerTimeData},${Metadata.getNote()},${Metadata.getPattern()},${Metadata.getLabel()},${LocalDateTime.now()}")
+            Log.d("Block","fileBlock")
+        }
     }
 
     private inner class SelectButtonListener: View.OnClickListener {
