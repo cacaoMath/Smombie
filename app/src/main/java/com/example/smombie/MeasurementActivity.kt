@@ -93,16 +93,16 @@ class MeasurementActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBackPressed() {
-        super.onBackPressed()
         AlertDialog.Builder(this)
                 .setTitle("確認")
                 .setMessage("計測を終了しますか")
                 .setPositiveButton("はい") { dialog, id ->
+                    dataSave()
+                    finish()
                 }
                 .setNegativeButton("いいえ") { dialog, id ->
-                    dataSave()
                 }.show()
-        finish()
+
     }
 
     private fun getTime(): Long {
