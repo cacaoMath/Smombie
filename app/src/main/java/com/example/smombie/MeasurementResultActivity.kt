@@ -12,7 +12,7 @@ import java.time.LocalDateTime
 
 class MeasurementResultActivity : AppCompatActivity() {
     private val TAG = this::class.java.simpleName
-    private var dataManager : DataFileManager? = null
+    private var dataManager: DataFileManager? = null
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -23,16 +23,16 @@ class MeasurementResultActivity : AppCompatActivity() {
         val finishBtn: Button = findViewById(R.id.finishBtn)
         val restartBtn: Button = findViewById(R.id.restartBtn)
 
-        val rightData = intent.extras?.getString("RightData") ?:""
-        val answeredData = intent.extras?.getString("AnsweredData") ?:""
-        val answerTimeData = intent.extras?.getString("AnswerTimeData") ?:""
+        val rightData = intent.extras?.getString("RightData") ?: ""
+        val answeredData = intent.extras?.getString("AnsweredData") ?: ""
+        val answerTimeData = intent.extras?.getString("AnswerTimeData") ?: ""
         Log.d(TAG, "$rightData")
 
         //データをcsvに保存
         dataManager = DataFileManager(this.applicationContext)
         runBlocking {
             dataManager?.saveData("${answeredData},${rightData},${answerTimeData},${Metadata.getNote()},${Metadata.getPattern()},${Metadata.getLabel()},${LocalDateTime.now()}")
-            Log.d("Block","fileBlock")
+            Log.d("Block", "fileBlock")
         }
 
 
@@ -46,7 +46,7 @@ class MeasurementResultActivity : AppCompatActivity() {
             val mainIntent = Intent(applicationContext, MainActivity::class.java)
             //メタデータをリセットする
             Metadata.resetValues()
-            Log.d("Block","finish")
+            Log.d("Block", "finish")
             startActivity(mainIntent)
             finish()
         }

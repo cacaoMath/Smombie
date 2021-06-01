@@ -17,12 +17,12 @@ import java.io.InputStreamReader
 
 class MainActivity : AppCompatActivity() {
     private val TAG = this::class.java.simpleName
-    lateinit var startBtn: Button
-    lateinit var labelSpinner: Spinner
-    lateinit var questionSpinner: Spinner
-    lateinit var labelList: Array<String>
-    lateinit var patternList: Array<String>
-    lateinit var noteEt: EditText
+    private lateinit var startBtn: Button
+    private lateinit var labelSpinner: Spinner
+    private lateinit var questionSpinner: Spinner
+    private lateinit var labelList: Array<String>
+    private lateinit var patternList: Array<String>
+    private lateinit var noteEt: EditText
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -46,17 +46,17 @@ class MainActivity : AppCompatActivity() {
         //csvから問題を取り込んでおく
         Metadata.setAllQuestionList(questionReader("JLPT_questions.csv"))
 
-        
-        Log.d(TAG,Metadata.getLabel())
-        startBtn.setOnClickListener{
+
+        Log.d(TAG, Metadata.getLabel())
+        startBtn.setOnClickListener {
             Metadata.setNote(noteEt.text?.toString() ?: "")
 
             //メタデータを何かしら選択したか
-            if(Metadata.getLabel() != "" && Metadata.getPattern() != ""){
+            if (Metadata.getLabel() != "" && Metadata.getPattern() != "") {
                 val measurementIntent = Intent(applicationContext, MeasurementActivity::class.java)
                 startActivity(measurementIntent)
-            }else{
-                Toast.makeText(applicationContext,"メタデータを入力してください", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(applicationContext, "メタデータを入力してください", Toast.LENGTH_LONG).show()
             }
 
         }
@@ -68,11 +68,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     //csvから問題を読み取り，リストにする
-    private fun questionReader(fileName : String):MutableList<Question>{
+    private fun questionReader(fileName: String): MutableList<Question> {
         val questionList = mutableListOf<Question>()
-        try{
+        try {
             val csvStream = BufferedReader(InputStreamReader(assets.open(fileName)))
-            Log.d(TAG,"${assets.open(fileName)}")
+            Log.d(TAG, "${assets.open(fileName)}")
             val beanList = CsvToBeanBuilder<Question>(csvStream)
                 .withType(Question::class.java)
                 .build()
@@ -82,8 +82,8 @@ class MainActivity : AppCompatActivity() {
                 questionList.add(q)
             }
 
-        }catch(e :Exception){
-            Log.d(TAG,"ファイルが存在しません")
+        } catch (e: Exception) {
+            Log.d(TAG, "ファイルが存在しません")
         }
         return questionList
     }
@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
 
     //オプションメニュー選択時処理
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             R.id.settingMenu -> {
                 val settingIntent = Intent(applicationContext, SettingActivity::class.java)
                 startActivity(settingIntent)
@@ -110,21 +110,22 @@ class MainActivity : AppCompatActivity() {
     class SpinnerActivity(list: Array<String>) : Activity(), AdapterView.OnItemSelectedListener {
 
         private val TAG = this::class.java.simpleName
-        private var arrayList : Array<String>? = null
+        private var arrayList: Array<String>? = null
 
         init {
             this.arrayList = list
         }
+
         override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
 
             //アクティビティ起動時に値がとられないようにする．
-            if(!parent.isFocusable) {
+            if (!parent.isFocusable) {
                 parent.isFocusable = true
                 return
             }
-            when(parent.id){
-                R.id.labelSpn ->{
-                    Log.d(TAG,"${arrayList?.get(id.toInt())}")
+            when (parent.id) {
+                R.id.labelSpn -> {
+                    Log.d(TAG, "${arrayList?.get(id.toInt())}")
                     arrayList?.get(id.toInt())?.let { Metadata.setLabel(it) }
                 }
                 R.id.qstSpn -> {
