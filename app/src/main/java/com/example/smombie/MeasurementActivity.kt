@@ -141,27 +141,27 @@ class MeasurementActivity : AppCompatActivity() {
         when (pattern) {
             "A" -> {
                 questionList = allQuestionList.filter {
-                    (it.number.toInt() in 1..50)
+                    (it.number.toInt() in 1..80)
                 }.toMutableList()
             }
             "B" -> {
                 questionList = allQuestionList.filter {
-                    (it.number.toInt() in 51..100)
+                    (it.number.toInt() in 81..160)
                 }.toMutableList()
             }
             "C" -> {
                 questionList = allQuestionList.filter {
-                    (it.number.toInt() in 101..150)
+                    (it.number.toInt() in 161..180)
                 }.toMutableList()
             }
             "D" -> {
                 questionList = allQuestionList.filter {
-                    (it.number.toInt() in 151..200)
+                    (it.number.toInt() in 181..200)
                 }.toMutableList()
             }
             else -> {
                 questionList = allQuestionList.filter {
-                    (it.number.toInt() in 201..allQuestionList.size)
+                    (it.number.toInt() in 1..allQuestionList.size)
                 }.toMutableList()
             }
         }
@@ -174,7 +174,7 @@ class MeasurementActivity : AppCompatActivity() {
         //データをcsvに保存
         dataManager = DataFileManager(this.applicationContext)
         runBlocking {
-            dataManager?.saveData("${answeredData},${rightData},${answerTimeData},${Metadata.getNote()},${Metadata.getPattern()},${Metadata.getLabel()},${LocalDateTime.now()}")
+            dataManager?.saveData("${answeredData.joinToString(prefix = "\"", postfix = "\"")},${rightData.joinToString(prefix = "\"", postfix = "\"")},${answerTimeData.joinToString(prefix = "\"", postfix = "\"")},${Metadata.getNote()},${Metadata.getPattern()},${Metadata.getLabel()},${LocalDateTime.now()}")
             Log.d("Block", "fileBlock")
         }
     }
